@@ -12,6 +12,7 @@
       --blue: #0051A5;
       --blue-dark: #003d7a;
       --gold: #F5C518;
+      --green: #16a34a;
       --white: #ffffff;
       --gray-100: #f4f5f7;
       --gray-300: #d1d5db;
@@ -28,7 +29,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 0 60px;
+      padding: 0 0 80px;
     }
 
     .header {
@@ -54,60 +55,70 @@
     .manager-btn:active { transform: scale(0.97); }
     .manager-btn.full-row { grid-column: span 2; }
 
-    /* PASSWORD MODAL */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+    /* MODALS */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; padding: 16px; }
     .modal-overlay.open { display: flex; }
-    .modal { background: var(--white); border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 320px; }
+    .modal { background: var(--white); border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 360px; max-height: 90vh; overflow-y: auto; }
     .modal-title { font-size: 1rem; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
     .modal-sub { font-size: 0.8rem; color: var(--gray-500); margin-bottom: 16px; }
     .modal-input { width: 100%; border: 2px solid var(--gray-300); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; color: var(--gray-700); outline: none; transition: border-color 0.15s; margin-bottom: 8px; }
     .modal-input:focus { border-color: var(--blue); }
     .modal-error { font-size: 0.78rem; font-weight: 700; color: var(--crimson); margin-bottom: 12px; display: none; }
-    .modal-footer { display: flex; gap: 8px; justify-content: flex-end; }
-    .btn-cancel { background: var(--gray-100); border: 2px solid var(--gray-300); color: var(--gray-700); border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
-    .btn-unlock { background: var(--blue); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
-    .btn-unlock:hover { opacity: 0.88; }
+    .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+    .btn-cancel { background: var(--gray-100); border: 2px solid var(--gray-300); color: var(--gray-700); border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; -webkit-appearance: none; }
+    .btn-primary { background: var(--blue); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-danger { background: var(--crimson); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+    .btn-danger:hover { opacity: 0.88; }
 
     /* COUNTDOWN */
     .countdown-card { background: var(--white); border-radius: 16px; padding: 24px 20px; margin-bottom: 16px; text-align: center; }
     .countdown-label { font-size: 0.7rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
     .countdown-time { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--crimson); letter-spacing: 3px; line-height: 1; }
-    .countdown-sub { font-size: 0.8rem; color: var(--gray-500); margin-top: 8px; }
     .countdown-units { display: flex; justify-content: center; gap: 24px; margin-top: 6px; }
     .countdown-unit { font-size: 0.6rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
+    .countdown-sub { font-size: 0.8rem; color: var(--gray-500); margin-top: 8px; }
 
     /* JOKE CARD */
     .joke-card { background: var(--blue); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; position: relative; overflow: hidden; }
     .joke-card::before { content: '🤖'; position: absolute; top: -10px; right: -4px; font-size: 5rem; opacity: 0.08; }
     .joke-label { font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
     .joke-text { font-size: 0.95rem; font-weight: 500; color: var(--white); line-height: 1.6; min-height: 70px; }
-    .joke-next { margin-top: 14px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; border-radius: 8px; padding: 8px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 700; cursor: pointer; -webkit-appearance: none; appearance: none; }
+    .joke-next { margin-top: 14px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; border-radius: 8px; padding: 8px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 700; cursor: pointer; -webkit-appearance: none; }
     .joke-next:hover { background: rgba(255,255,255,0.25); }
 
     /* DRAFT UI */
     .order-card { background: var(--white); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
-    .order-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .order-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
     .order-title { font-size: 1rem; font-weight: 700; color: var(--blue); }
     .order-sub { font-size: 0.72rem; color: var(--gray-500); margin-top: 2px; }
-    .randomize-btn { background: var(--crimson); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+    .header-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .randomize-btn { background: var(--crimson); color: white; border: none; border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
     .randomize-btn:hover { opacity: 0.88; }
     .randomize-btn:disabled { opacity: 0.4; cursor: default; }
+    .admin-btn { background: var(--blue-dark); color: white; border: none; border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .admin-btn:hover { opacity: 0.88; }
 
     .pick-list { display: flex; flex-direction: column; gap: 6px; }
     .pick-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--gray-100); border: 2px solid transparent; transition: all 0.2s; }
     .pick-row.is-mine { border-color: var(--blue); background: #e8f0fb; }
     .pick-row.is-current { border-color: var(--gold); background: #fffbea; box-shadow: 0 2px 8px rgba(245,197,24,0.25); }
-    .pick-row.completed { opacity: 0.55; }
-    .pick-row.completed .pick-name { text-decoration: line-through; }
+    .pick-row.completed { opacity: 0.7; }
     .pick-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--gray-500); min-width: 28px; text-align: center; }
     .pick-row.is-current .pick-num { color: var(--gold); }
     .pick-row.is-mine .pick-num { color: var(--blue); }
-    .pick-name { font-size: 0.95rem; font-weight: 700; color: var(--gray-700); flex: 1; }
-    .pick-badge { font-size: 0.65rem; font-weight: 700; padding: 3px 7px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .pick-name { font-size: 0.95rem; font-weight: 700; color: var(--gray-700); min-width: 60px; }
+    .pick-badge { font-size: 0.65rem; font-weight: 700; padding: 3px 7px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
     .badge-you { background: var(--blue); color: white; }
     .badge-up { background: var(--gold); color: #7a5800; }
     .badge-done { background: var(--gray-300); color: var(--gray-500); }
-    .player-entered { font-size: 0.75rem; color: var(--gray-500); font-weight: 500; font-style: italic; flex: 1; }
+    .player-entered { font-size: 0.78rem; color: var(--gray-500); font-weight: 500; font-style: italic; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .edit-pick-btn { background: none; border: 1px solid var(--gray-300); border-radius: 6px; padding: 3px 8px; font-size: 0.7rem; font-weight: 700; color: var(--gray-500); cursor: pointer; white-space: nowrap; display: none; }
+    .edit-pick-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* show edit buttons for admin */
+    body.is-admin .edit-pick-btn { display: block; }
+    body.is-admin .pick-row.completed { opacity: 1; }
 
     .input-card { background: var(--white); border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 2px solid var(--gold); }
     .input-label { font-size: 0.7rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
@@ -115,7 +126,7 @@
     .input-row { display: flex; gap: 8px; }
     .player-input { flex: 1; border: 2px solid var(--gray-300); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--gray-700); outline: none; transition: border-color 0.15s; }
     .player-input:focus { border-color: var(--blue); }
-    .submit-btn { background: var(--blue); color: white; border: none; border-radius: 10px; padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+    .submit-btn { background: var(--blue); color: white; border: none; border-radius: 10px; padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
     .submit-btn:hover { opacity: 0.88; }
     .submit-btn:disabled { opacity: 0.4; cursor: default; }
 
@@ -136,8 +147,41 @@
 
     .sync-bar { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-align: center; margin-top: 8px; }
 
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--gray-700); color: white; padding: 10px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; transition: transform 0.25s; z-index: 999; white-space: nowrap; }
+    /* ADMIN PANEL */
+    .admin-panel { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .admin-panel-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--gold); letter-spacing: 1px; margin-bottom: 14px; }
+    .admin-section { margin-bottom: 14px; }
+    .admin-section-label { font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .admin-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .admin-action-btn { padding: 10px 14px; border-radius: 10px; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: opacity 0.15s; }
+    .admin-action-btn:hover { opacity: 0.85; }
+    .a-blue { background: var(--blue); color: white; }
+    .a-red { background: var(--crimson); color: white; }
+    .a-gold { background: var(--gold); color: #5a3e00; }
+    .a-green { background: var(--green); color: white; }
+    .a-gray { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.2); }
+
+    /* pick manager table in admin */
+    .picks-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .picks-table th { font-size: 0.68rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.3px; padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--gray-300); }
+    .picks-table td { padding: 8px; font-size: 0.85rem; color: var(--gray-700); border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+    .picks-table tr:last-child td { border-bottom: none; }
+    .picks-table input { border: 1px solid var(--gray-300); border-radius: 6px; padding: 4px 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; width: 100%; outline: none; }
+    .picks-table input:focus { border-color: var(--blue); }
+    .tbl-save-btn { background: var(--green); color: white; border: none; border-radius: 6px; padding: 4px 10px; font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .tbl-del-btn  { background: var(--crimson); color: white; border: none; border-radius: 6px; padding: 4px 10px; font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 700; cursor: pointer; white-space: nowrap; margin-left: 4px; }
+
+    /* draft time editor */
+    .time-editor { display: flex; flex-direction: column; gap: 8px; }
+    .time-editor input { border: 2px solid var(--gray-300); border-radius: 10px; padding: 10px 12px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--gray-700); outline: none; }
+    .time-editor input:focus { border-color: var(--blue); }
+    .time-note { font-size: 0.72rem; color: var(--gray-500); }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--gray-700); color: white; padding: 10px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; transition: transform 0.25s; z-index: 999; white-space: nowrap; max-width: 90vw; text-align: center; }
     .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* divider */
+    .section-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0 16px; }
   </style>
 </head>
 <body>
@@ -166,10 +210,10 @@
   <!-- LOADING -->
   <div id="loading-card" class="loading-card" style="display:none">Loading draft data…</div>
 
-  <!-- COUNTDOWN + JOKES (shown before 8:30 PM CT) -->
+  <!-- PRE-DRAFT: countdown + jokes -->
   <div id="pre-draft" style="display:none">
     <div class="countdown-card">
-      <div class="countdown-label">Draft starts Wednesday March 18 at 8:30 PM CT</div>
+      <div class="countdown-label" id="countdown-label">Draft starts Wednesday March 18 at 8:30 PM CT</div>
       <div class="countdown-time" id="countdown-display">--:--:--</div>
       <div class="countdown-units">
         <div class="countdown-unit">Hours</div>
@@ -187,13 +231,61 @@
 
   <!-- MAIN DRAFT UI -->
   <div id="main-content" style="display:none">
+
+    <!-- ADMIN PANEL (Charles only) -->
+    <div id="admin-panel" class="admin-panel" style="display:none">
+      <div class="admin-panel-title">⚙️ Admin Panel</div>
+
+      <div class="admin-section">
+        <div class="admin-section-label">Draft Order</div>
+        <div class="admin-row">
+          <button class="admin-action-btn a-red" onclick="randomizeDraft()">🎲 Re-Randomize Order</button>
+          <button class="admin-action-btn a-gray" onclick="openReorderModal()">✏️ Set Manual Order</button>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="admin-section">
+        <div class="admin-section-label">Picks</div>
+        <div class="admin-row">
+          <button class="admin-action-btn a-blue" onclick="openEditPicksModal()">✏️ Edit Any Pick</button>
+          <button class="admin-action-btn a-gold" onclick="clearLastPick()">↩ Undo Last Pick</button>
+          <button class="admin-action-btn a-red" onclick="clearAllPicks()">🗑 Clear All Picks</button>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="admin-section">
+        <div class="admin-section-label">Draft Time</div>
+        <div class="admin-row">
+          <button class="admin-action-btn a-blue" onclick="openTimeModal()">🕐 Change Draft Time</button>
+          <button class="admin-action-btn a-green" onclick="openDraftNow()">▶ Open Draft Now</button>
+          <button class="admin-action-btn a-gray" onclick="revertToPredraft()">⏪ Revert to Countdown</button>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="admin-section">
+        <div class="admin-section-label">Full Reset</div>
+        <div class="admin-row">
+          <button class="admin-action-btn a-red" onclick="fullReset()">💣 Full Reset Everything</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRAFT BOARD -->
     <div class="order-card">
       <div class="order-header">
         <div>
           <div class="order-title">Draft Order</div>
           <div class="order-sub" id="order-sub-text">Not set yet</div>
         </div>
-        <button class="randomize-btn" id="randomize-btn" onclick="randomizeDraft()" style="display:none">🎲 Randomize</button>
+        <div class="header-btns">
+          <button class="admin-btn" id="toggle-admin-btn" onclick="toggleAdminPanel()" style="display:none">⚙️ Admin</button>
+        </div>
       </div>
       <div id="pick-list" class="pick-list">
         <div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Waiting for Charles to set the draft order.</div>
@@ -217,7 +309,6 @@
       <div class="complete-icon">🏆</div>
       <div class="complete-title">Draft Complete</div>
       <div class="complete-sub">All 25 picks locked in. Rock Chalk!</div>
-      <button class="reset-btn" onclick="resetDraft()">Start New Draft</button>
     </div>
 
     <div class="sync-bar" id="sync-bar"></div>
@@ -234,7 +325,49 @@
     <div class="modal-error" id="modal-pw-error">Wrong password. Try again.</div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="cancelPassword()">Cancel</button>
-      <button class="btn-unlock" onclick="submitPassword()">Unlock</button>
+      <button class="btn-primary" onclick="submitPassword()">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PICKS MODAL -->
+<div class="modal-overlay" id="edit-picks-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-title">Edit Picks</div>
+    <div class="modal-sub">Edit or delete any locked pick. Changes save immediately.</div>
+    <div id="edit-picks-table-wrap"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('edit-picks-modal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- MANUAL ORDER MODAL -->
+<div class="modal-overlay" id="reorder-modal">
+  <div class="modal">
+    <div class="modal-title">Set Draft Order</div>
+    <div class="modal-sub">Enter the pick order for Round 1. Snake reverses automatically.</div>
+    <div id="reorder-slots"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('reorder-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveManualOrder()">Save Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE TIME MODAL -->
+<div class="modal-overlay" id="time-modal">
+  <div class="modal">
+    <div class="modal-title">Change Draft Time</div>
+    <div class="modal-sub">Set a new countdown target. Enter date and time in CT.</div>
+    <div class="time-editor">
+      <input type="date" id="time-date-input" class="modal-input" style="margin-bottom:0">
+      <input type="time" id="time-time-input" class="modal-input" style="margin-bottom:0">
+      <div class="time-note">CT = UTC-5 (CDT) or UTC-6 (CST). Current target shown in countdown.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('time-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveNewTime()">Update Time</button>
     </div>
   </div>
 </div>
@@ -255,23 +388,29 @@
   const ROUNDS       = 5;
   const CHARLES_PASS = '1234';
 
-  // Draft target: Wednesday March 18 2026 8:30 PM CST = 02:30 UTC March 19
-  // CST = UTC-6
-  const DRAFT_START = new Date('2026-03-19T02:30:00Z');
+  // Default draft start: March 18 2026 8:30 PM CST = March 19 2026 02:30 UTC
+  const DEFAULT_DRAFT_START = '2026-03-19T02:30:00Z';
 
   let currentUser    = null;
-  let state          = { order: [], picks: {}, randomized: false };
+  let state          = { order: [], picks: {}, randomized: false, draftStart: DEFAULT_DRAFT_START, forceOpen: false };
   let pollTimer      = null;
   let countdownTimer = null;
+  let adminOpen      = false;
 
-  // ── Countdown helpers ───────────────────────────────────
+  // ── Draft time helpers ──────────────────────────────────
+  function getDraftStart() {
+    return new Date(state.draftStart || DEFAULT_DRAFT_START);
+  }
+
   function isDraftOpen() {
-    return new Date() >= DRAFT_START;
+    if (state.forceOpen) return true;
+    return new Date() >= getDraftStart();
   }
 
   function updateCountdown() {
-    const now  = new Date();
-    const diff = DRAFT_START - now;
+    var now    = new Date();
+    var target = getDraftStart();
+    var diff   = target - now;
 
     if (diff <= 0) {
       document.getElementById('countdown-display').textContent = 'LIVE!';
@@ -279,12 +418,16 @@
       return;
     }
 
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
+    var h = Math.floor(diff / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('countdown-display').textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
 
-    document.getElementById('countdown-display').textContent =
-      pad(h) + ':' + pad(m) + ':' + pad(s);
+    // Update label with current target time
+    var d = getDraftStart();
+    var label = 'Draft starts ' + d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', timeZone:'America/Chicago' })
+      + ' at ' + d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', timeZone:'America/Chicago', timeZoneName:'short' });
+    document.getElementById('countdown-label').textContent = label;
   }
 
   function pad(n) { return String(n).padStart(2, '0'); }
@@ -292,17 +435,17 @@
   // ── Password modal ──────────────────────────────────────
   function selectMe(name) {
     if (name === 'charles') {
-      document.getElementById('modal-pw-input').value        = '';
+      document.getElementById('modal-pw-input').value         = '';
       document.getElementById('modal-pw-error').style.display = 'none';
       document.getElementById('password-modal').classList.add('open');
-      setTimeout(() => document.getElementById('modal-pw-input').focus(), 60);
+      setTimeout(function() { document.getElementById('modal-pw-input').focus(); }, 60);
     } else {
       proceedAs(name);
     }
   }
 
   function submitPassword() {
-    const val = document.getElementById('modal-pw-input').value;
+    var val = document.getElementById('modal-pw-input').value;
     if (val === CHARLES_PASS) {
       document.getElementById('password-modal').classList.remove('open');
       proceedAs('charles');
@@ -324,9 +467,9 @@
     document.getElementById('loading-card').style.display = 'block';
 
     fetchState().then(function(s) {
-      state = s;
+      state = Object.assign({ order:[], picks:{}, randomized:false, draftStart: DEFAULT_DRAFT_START, forceOpen: false }, s);
       document.getElementById('loading-card').style.display = 'none';
-
+      if (currentUser === 'charles') document.body.classList.add('is-admin');
       if (isDraftOpen()) {
         showDraft();
       } else {
@@ -340,35 +483,386 @@
     });
   }
 
-  // ── Pre-draft screen ────────────────────────────────────
+  // ── Pre-draft ───────────────────────────────────────────
   function showPreDraft() {
     document.getElementById('pre-draft').style.display    = 'block';
     document.getElementById('main-content').style.display = 'none';
-
-    // Show first joke
     jokeIdx = Math.floor(Math.random() * JOKES.length);
     document.getElementById('joke-text').textContent = JOKES[jokeIdx];
-
-    // Start countdown ticker
     updateCountdown();
     clearInterval(countdownTimer);
     countdownTimer = setInterval(function() {
       updateCountdown();
       if (isDraftOpen()) {
         clearInterval(countdownTimer);
-        fetchState().then(function(s) { state = s; showDraft(); });
+        fetchState().then(function(s) {
+          state = Object.assign({ order:[], picks:{}, randomized:false, draftStart: DEFAULT_DRAFT_START, forceOpen: false }, s);
+          showDraft();
+        });
       }
     }, 1000);
   }
 
-  // ── Draft screen ────────────────────────────────────────
+  // ── Draft ───────────────────────────────────────────────
   function showDraft() {
     clearInterval(countdownTimer);
     document.getElementById('pre-draft').style.display    = 'none';
     document.getElementById('main-content').style.display = 'block';
-    document.getElementById('randomize-btn').style.display = currentUser === 'charles' ? 'block' : 'none';
+    if (currentUser === 'charles') {
+      document.getElementById('toggle-admin-btn').style.display = 'block';
+    }
     render();
     startPolling();
+  }
+
+  function toggleAdminPanel() {
+    adminOpen = !adminOpen;
+    document.getElementById('admin-panel').style.display = adminOpen ? 'block' : 'none';
+    document.getElementById('toggle-admin-btn').textContent = adminOpen ? '✕ Close Admin' : '⚙️ Admin';
+  }
+
+  // ── Polling ─────────────────────────────────────────────
+  function startPolling() {
+    clearInterval(pollTimer);
+    pollTimer = setInterval(function() {
+      fetchState().then(function(s) {
+        state = Object.assign({ order:[], picks:{}, randomized:false, draftStart: DEFAULT_DRAFT_START, forceOpen: false }, s);
+        render();
+        document.getElementById('sync-bar').textContent =
+          'Live · ' + new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+      }).catch(function() {});
+    }, 5000);
+  }
+
+  // ── JSONbin ─────────────────────────────────────────────
+  async function fetchState() {
+    var res = await fetch(BIN_URL + '/latest', { headers: H_READ });
+    if (!res.ok) throw new Error('Load failed');
+    return (await res.json()).record;
+  }
+
+  async function pushState(s) {
+    var res = await fetch(BIN_URL, { method: 'PUT', headers: H_WRITE, body: JSON.stringify(s) });
+    if (!res.ok) throw new Error('Save failed');
+  }
+
+  // ── Snake draft ─────────────────────────────────────────
+  function buildSnake(order) {
+    var picks = [];
+    for (var r = 0; r < ROUNDS; r++) {
+      var arr = r % 2 === 0 ? order.slice() : order.slice().reverse();
+      arr.forEach(function(m) { picks.push({ manager: m }); });
+    }
+    return picks;
+  }
+
+  function getCurrentIdx(picks) {
+    for (var i = 0; i < picks.length; i++) {
+      if (!state.picks[i + 1]) return i;
+    }
+    return picks.length;
+  }
+
+  // ── Admin actions ───────────────────────────────────────
+
+  async function randomizeDraft() {
+    if (!confirm('Re-randomize draft order? This clears all existing picks.')) return;
+    var arr = MANAGERS.slice();
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    var ns = Object.assign({}, state, { order: arr, picks: {}, randomized: true });
+    await save(ns, 'Draft order randomized!');
+  }
+
+  function openReorderModal() {
+    var wrap = document.getElementById('reorder-slots');
+    wrap.innerHTML = '';
+    var currentOrder = state.order.length === MANAGERS.length ? state.order : MANAGERS;
+    MANAGERS.forEach(function(m, i) {
+      var label = document.createElement('div');
+      label.style.cssText = 'font-size:.8rem;font-weight:700;color:var(--gray-500);margin-bottom:4px;margin-top:' + (i > 0 ? '10px' : '0');
+      label.textContent = 'Pick ' + (i + 1);
+      var sel = document.createElement('select');
+      sel.className   = 'modal-input';
+      sel.style.marginBottom = '0';
+      sel.id = 'reorder-slot-' + i;
+      MANAGERS.forEach(function(mg) {
+        var opt = document.createElement('option');
+        opt.value       = mg;
+        opt.textContent = DISPLAY[mg];
+        if (currentOrder[i] === mg) opt.selected = true;
+        sel.appendChild(opt);
+      });
+      wrap.appendChild(label);
+      wrap.appendChild(sel);
+    });
+    openModal('reorder-modal');
+  }
+
+  async function saveManualOrder() {
+    var order = [];
+    for (var i = 0; i < MANAGERS.length; i++) {
+      order.push(document.getElementById('reorder-slot-' + i).value);
+    }
+    var unique = new Set(order);
+    if (unique.size !== MANAGERS.length) {
+      showToast('Each manager must appear exactly once', true);
+      return;
+    }
+    var ns = Object.assign({}, state, { order: order, randomized: true });
+    closeModal('reorder-modal');
+    await save(ns, 'Draft order updated!');
+  }
+
+  function openEditPicksModal() {
+    if (!state.randomized || !state.order.length) { showToast('Set draft order first', true); return; }
+    var picks = buildSnake(state.order);
+    var wrap  = document.getElementById('edit-picks-table-wrap');
+
+    var html = '<table class="picks-table"><thead><tr><th>#</th><th>Manager</th><th>Player</th><th></th></tr></thead><tbody>';
+    picks.forEach(function(pick, i) {
+      var pickNum    = i + 1;
+      var playerName = state.picks[pickNum] ? state.picks[pickNum].player : '';
+      html += '<tr>'
+        + '<td>' + pickNum + '</td>'
+        + '<td>' + DISPLAY[pick.manager] + '</td>'
+        + '<td><input id="ep-' + pickNum + '" value="' + escAttr(playerName) + '" placeholder="—"></td>'
+        + '<td style="white-space:nowrap">'
+        + '<button class="tbl-save-btn" onclick="savePickEdit(' + pickNum + ')">Save</button>'
+        + (playerName ? '<button class="tbl-del-btn" onclick="deletePickEdit(' + pickNum + ')">Del</button>' : '')
+        + '</td>'
+        + '</tr>';
+    });
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+    openModal('edit-picks-modal');
+  }
+
+  async function savePickEdit(pickNum) {
+    var val = document.getElementById('ep-' + pickNum).value.trim();
+    if (!val) { showToast('Enter a player name', true); return; }
+    var picks   = buildSnake(state.order);
+    var manager = picks[pickNum - 1].manager;
+    var newPicks = Object.assign({}, state.picks);
+    newPicks[pickNum] = { manager: manager, player: val };
+    var ns = Object.assign({}, state, { picks: newPicks });
+    await save(ns, 'Pick ' + pickNum + ' updated!');
+    openEditPicksModal(); // refresh table
+  }
+
+  async function deletePickEdit(pickNum) {
+    if (!confirm('Delete pick ' + pickNum + '?')) return;
+    var newPicks = Object.assign({}, state.picks);
+    delete newPicks[pickNum];
+    var ns = Object.assign({}, state, { picks: newPicks });
+    await save(ns, 'Pick ' + pickNum + ' deleted');
+    openEditPicksModal();
+  }
+
+  async function clearLastPick() {
+    var picks  = buildSnake(state.order);
+    var curIdx = getCurrentIdx(picks);
+    if (curIdx === 0) { showToast('No picks to undo', true); return; }
+    var lastPickNum = curIdx; // curIdx is 0-based, so last completed = curIdx (1-based)
+    if (!state.picks[lastPickNum]) { showToast('No picks to undo', true); return; }
+    if (!confirm('Undo pick ' + lastPickNum + ' (' + state.picks[lastPickNum].player + ')?')) return;
+    var newPicks = Object.assign({}, state.picks);
+    delete newPicks[lastPickNum];
+    var ns = Object.assign({}, state, { picks: newPicks });
+    await save(ns, 'Pick ' + lastPickNum + ' undone');
+  }
+
+  async function clearAllPicks() {
+    if (!confirm('Clear ALL picks? This cannot be undone.')) return;
+    var ns = Object.assign({}, state, { picks: {} });
+    await save(ns, 'All picks cleared');
+  }
+
+  function openTimeModal() {
+    var d = getDraftStart();
+    // Format for CT
+    var ctDate = new Date(d.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+    var yyyy = ctDate.getFullYear();
+    var mm   = String(ctDate.getMonth() + 1).padStart(2, '0');
+    var dd   = String(ctDate.getDate()).padStart(2, '0');
+    var hh   = String(ctDate.getHours()).padStart(2, '0');
+    var min  = String(ctDate.getMinutes()).padStart(2, '0');
+    document.getElementById('time-date-input').value = yyyy + '-' + mm + '-' + dd;
+    document.getElementById('time-time-input').value = hh + ':' + min;
+    openModal('time-modal');
+  }
+
+  async function saveNewTime() {
+    var dateVal = document.getElementById('time-date-input').value;
+    var timeVal = document.getElementById('time-time-input').value;
+    if (!dateVal || !timeVal) { showToast('Enter a date and time', true); return; }
+    // Parse as CT (CDT = UTC-5)
+    var localStr = dateVal + 'T' + timeVal + ':00';
+    var ctOffset = -5 * 60; // CDT
+    var local    = new Date(localStr);
+    var utcMs    = local.getTime() - ctOffset * 60000;
+    var utcDate  = new Date(utcMs);
+    var ns = Object.assign({}, state, { draftStart: utcDate.toISOString(), forceOpen: false });
+    closeModal('time-modal');
+    await save(ns, 'Draft time updated!');
+    updateCountdown();
+  }
+
+  async function openDraftNow() {
+    if (!confirm('Force-open the draft right now for everyone?')) return;
+    var ns = Object.assign({}, state, { forceOpen: true });
+    await save(ns, 'Draft opened!');
+    showDraft();
+  }
+
+  async function revertToPredraft() {
+    if (!confirm('Send everyone back to the countdown screen?')) return;
+    var ns = Object.assign({}, state, { forceOpen: false });
+    await save(ns, 'Reverted to countdown');
+    showPreDraft();
+  }
+
+  async function fullReset() {
+    if (!confirm('FULL RESET — delete everything: order, picks, and settings?')) return;
+    if (!confirm('Are you absolutely sure? This cannot be undone.')) return;
+    var ns = { order: [], picks: {}, randomized: false, draftStart: DEFAULT_DRAFT_START, forceOpen: false };
+    await save(ns, 'Full reset complete');
+    render();
+  }
+
+  // ── Regular draft actions ───────────────────────────────
+  async function submitPick() {
+    var val = document.getElementById('player-input').value.trim();
+    if (!val) { showToast('Enter a player name first', true); return; }
+    var picks = buildSnake(state.order);
+    var idx   = getCurrentIdx(picks);
+    if (idx >= picks.length) return;
+    if (picks[idx].manager !== currentUser) { showToast("That's not your pick!", true); return; }
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    var newPicks = Object.assign({}, state.picks);
+    newPicks[idx + 1] = { manager: currentUser, player: val };
+    var ns = Object.assign({}, state, { picks: newPicks });
+    try {
+      await pushState(ns);
+      state = ns;
+      document.getElementById('player-input').value = '';
+      showToast('Pick ' + (idx + 1) + ' locked in — ' + val);
+      render();
+    } catch(e) { showToast('Failed to save — try again', true); }
+    finally { btn.disabled = false; btn.textContent = 'Lock In'; }
+  }
+
+  // ── Save helper ─────────────────────────────────────────
+  async function save(ns, msg) {
+    try {
+      await pushState(ns);
+      state = ns;
+      if (msg) showToast(msg);
+      render();
+    } catch(e) {
+      showToast('Save failed — try again', true);
+    }
+  }
+
+  // ── Render ───────────────────────────────────────────────
+  function render() {
+    if (!state.randomized || !state.order || state.order.length === 0) {
+      document.getElementById('order-sub-text').textContent = 'Not set yet';
+      document.getElementById('pick-list').innerHTML = currentUser === 'charles'
+        ? '<div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Use Admin panel to set the draft order.</div>'
+        : '<div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Waiting for Charles to set the draft order.</div>';
+      document.getElementById('input-card').style.display    = 'none';
+      document.getElementById('wait-card').style.display     = 'none';
+      document.getElementById('complete-card').style.display = 'none';
+      return;
+    }
+
+    var picks  = buildSnake(state.order);
+    var curIdx = getCurrentIdx(picks);
+    var isDone = curIdx >= picks.length;
+
+    document.getElementById('order-sub-text').textContent =
+      'Round 1: ' + state.order.map(function(m) { return DISPLAY[m]; }).join(' → ');
+
+    var html = '', lastRound = 0;
+    picks.forEach(function(pick, i) {
+      var round = Math.floor(i / 5) + 1;
+      var rev   = round % 2 === 0;
+      if (round !== lastRound) {
+        html += '<div class="round-divider"><div class="round-divider-line"></div><div class="round-divider-label">Round ' + round + (rev ? ' ↩' : '') + '</div><div class="round-divider-line"></div></div>';
+        lastRound = round;
+      }
+      var isCurrent  = (i === curIdx && !isDone);
+      var isMe       = (pick.manager === currentUser);
+      var done       = !!state.picks[i + 1];
+      var playerName = state.picks[i + 1] ? state.picks[i + 1].player : '';
+      var badge = '';
+      if (done)                   badge = '<span class="pick-badge badge-done">Done</span>';
+      else if (isCurrent && isMe) badge = '<span class="pick-badge badge-you">Your Pick</span>';
+      else if (isCurrent)         badge = '<span class="pick-badge badge-up">Up Now</span>';
+
+      html += '<div class="pick-row'
+        + (isCurrent ? ' is-current' : '')
+        + (isMe && !done ? ' is-mine' : '')
+        + (done ? ' completed' : '') + '">'
+        + '<div class="pick-num">' + (i + 1) + '</div>'
+        + '<div class="pick-name">' + DISPLAY[pick.manager] + '</div>'
+        + (playerName ? '<div class="player-entered">' + playerName + '</div>' : '<div class="player-entered"></div>')
+        + badge
+        + (currentUser === 'charles' ? '<button class="edit-pick-btn" onclick="quickEdit(' + (i+1) + ')">Edit</button>' : '')
+        + '</div>';
+    });
+
+    document.getElementById('pick-list').innerHTML = html;
+
+    if (isDone) {
+      document.getElementById('input-card').style.display    = 'none';
+      document.getElementById('wait-card').style.display     = 'none';
+      document.getElementById('complete-card').style.display = 'block';
+    } else {
+      document.getElementById('complete-card').style.display = 'none';
+      var cur = picks[curIdx];
+      if (cur.manager === currentUser) {
+        document.getElementById('input-card').style.display  = 'block';
+        document.getElementById('wait-card').style.display   = 'none';
+        document.getElementById('input-title').textContent   = 'Pick ' + (curIdx + 1) + ' — Enter your player';
+        setTimeout(function() { document.getElementById('player-input').focus(); }, 60);
+      } else {
+        document.getElementById('input-card').style.display  = 'none';
+        document.getElementById('wait-card').style.display   = 'block';
+        document.getElementById('wait-name').textContent     = DISPLAY[cur.manager];
+      }
+    }
+  }
+
+  // Quick inline edit from pick list
+  async function quickEdit(pickNum) {
+    var current = state.picks[pickNum] ? state.picks[pickNum].player : '';
+    var val = prompt('Edit pick ' + pickNum + ':', current);
+    if (val === null) return;
+    if (val.trim() === '') {
+      if (!confirm('Delete pick ' + pickNum + '?')) return;
+      var newPicks = Object.assign({}, state.picks);
+      delete newPicks[pickNum];
+      await save(Object.assign({}, state, { picks: newPicks }), 'Pick ' + pickNum + ' deleted');
+    } else {
+      var picks   = buildSnake(state.order);
+      var manager = picks[pickNum - 1].manager;
+      var newPicks = Object.assign({}, state.picks);
+      newPicks[pickNum] = { manager: manager, player: val.trim() };
+      await save(Object.assign({}, state, { picks: newPicks }), 'Pick ' + pickNum + ' updated!');
+    }
+  }
+
+  // ── Modal helpers ───────────────────────────────────────
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  function escAttr(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
   // ── Jokes ───────────────────────────────────────────────
@@ -400,168 +894,10 @@
     "Why did Kyle's girlfriend break up with him? She asked Alexa for advice and Alexa said she could do better.",
   ];
 
-  let jokeIdx = 0;
+  var jokeIdx = 0;
   function nextJoke() {
     jokeIdx = (jokeIdx + 1) % JOKES.length;
     document.getElementById('joke-text').textContent = JOKES[jokeIdx];
-  }
-
-  // ── JSONbin ─────────────────────────────────────────────
-  async function fetchState() {
-    const res = await fetch(BIN_URL + '/latest', { headers: H_READ });
-    if (!res.ok) throw new Error('Load failed');
-    return (await res.json()).record;
-  }
-
-  async function pushState(s) {
-    const res = await fetch(BIN_URL, { method: 'PUT', headers: H_WRITE, body: JSON.stringify(s) });
-    if (!res.ok) throw new Error('Save failed');
-  }
-
-  // ── Polling ─────────────────────────────────────────────
-  function startPolling() {
-    clearInterval(pollTimer);
-    pollTimer = setInterval(async function() {
-      try {
-        state = await fetchState();
-        render();
-        document.getElementById('sync-bar').textContent =
-          'Live · ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      } catch(e) {}
-    }, 5000);
-  }
-
-  // ── Snake draft ─────────────────────────────────────────
-  function buildSnake(order) {
-    var picks = [];
-    for (var r = 0; r < ROUNDS; r++) {
-      var arr = r % 2 === 0 ? order.slice() : order.slice().reverse();
-      arr.forEach(function(m) { picks.push({ manager: m }); });
-    }
-    return picks;
-  }
-
-  function getCurrentIdx(picks) {
-    for (var i = 0; i < picks.length; i++) {
-      if (!state.picks[i + 1]) return i;
-    }
-    return picks.length;
-  }
-
-  async function randomizeDraft() {
-    if (currentUser !== 'charles') return;
-    var btn = document.getElementById('randomize-btn');
-    btn.disabled = true; btn.textContent = 'Setting…';
-    var arr = MANAGERS.slice();
-    for (var i = arr.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-    }
-    var newState = { order: arr, picks: {}, randomized: true };
-    try {
-      await pushState(newState);
-      state = newState;
-      showToast('Draft order set! 🎲');
-      render();
-    } catch(e) { showToast('Failed to save — try again', true); }
-    finally { btn.disabled = false; btn.textContent = '🎲 Re-Randomize'; }
-  }
-
-  async function submitPick() {
-    var val = document.getElementById('player-input').value.trim();
-    if (!val) { showToast('Enter a player name first', true); return; }
-    var picks = buildSnake(state.order);
-    var idx   = getCurrentIdx(picks);
-    if (idx >= picks.length) return;
-    if (picks[idx].manager !== currentUser) { showToast("That's not your pick!", true); return; }
-    var btn = document.getElementById('submit-btn');
-    btn.disabled = true; btn.textContent = 'Saving…';
-    var newPicks = Object.assign({}, state.picks);
-    newPicks[idx + 1] = { manager: currentUser, player: val };
-    var newState = { order: state.order, picks: newPicks, randomized: state.randomized };
-    try {
-      await pushState(newState);
-      state = newState;
-      document.getElementById('player-input').value = '';
-      showToast('Pick ' + (idx + 1) + ' locked in — ' + val);
-      render();
-    } catch(e) { showToast('Failed to save — try again', true); }
-    finally { btn.disabled = false; btn.textContent = 'Lock In'; }
-  }
-
-  async function resetDraft() {
-    if (!confirm('Reset the entire draft? All picks will be cleared.')) return;
-    var newState = { order: [], picks: {}, randomized: false };
-    try { await pushState(newState); state = newState; render(); showToast('Draft reset'); }
-    catch(e) { showToast('Failed to reset', true); }
-  }
-
-  // ── Render ───────────────────────────────────────────────
-  function render() {
-    if (!state.randomized || !state.order || state.order.length === 0) {
-      document.getElementById('order-sub-text').textContent = 'Not set yet';
-      document.getElementById('pick-list').innerHTML = currentUser === 'charles'
-        ? '<div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Hit Randomize to set the draft order.</div>'
-        : '<div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Waiting for Charles to set the draft order.</div>';
-      document.getElementById('input-card').style.display    = 'none';
-      document.getElementById('wait-card').style.display     = 'none';
-      document.getElementById('complete-card').style.display = 'none';
-      return;
-    }
-
-    var picks  = buildSnake(state.order);
-    var curIdx = getCurrentIdx(picks);
-    var isDone = curIdx >= picks.length;
-
-    document.getElementById('order-sub-text').textContent =
-      'Round 1: ' + state.order.map(function(m) { return DISPLAY[m]; }).join(' → ');
-
-    var html = '', lastRound = 0;
-    picks.forEach(function(pick, i) {
-      var round = Math.floor(i / 5) + 1;
-      var rev   = round % 2 === 0;
-      if (round !== lastRound) {
-        html += '<div class="round-divider"><div class="round-divider-line"></div><div class="round-divider-label">Round ' + round + (rev ? ' ↩' : '') + '</div><div class="round-divider-line"></div></div>';
-        lastRound = round;
-      }
-      var isCurrent  = (i === curIdx && !isDone);
-      var isMe       = (pick.manager === currentUser);
-      var done       = !!state.picks[i + 1];
-      var playerName = state.picks[i + 1] ? state.picks[i + 1].player : '';
-      var badge = '';
-      if (done)                   badge = '<span class="pick-badge badge-done">Done</span>';
-      else if (isCurrent && isMe) badge = '<span class="pick-badge badge-you">Your Pick</span>';
-      else if (isCurrent)         badge = '<span class="pick-badge badge-up">Up Now</span>';
-      html += '<div class="pick-row'
-        + (isCurrent ? ' is-current' : '')
-        + (isMe && !done ? ' is-mine' : '')
-        + (done ? ' completed' : '') + '">'
-        + '<div class="pick-num">' + (i + 1) + '</div>'
-        + '<div class="pick-name">' + DISPLAY[pick.manager] + '</div>'
-        + (playerName ? '<div class="player-entered">' + playerName + '</div>' : '')
-        + badge + '</div>';
-    });
-
-    document.getElementById('pick-list').innerHTML = html;
-
-    if (isDone) {
-      document.getElementById('input-card').style.display    = 'none';
-      document.getElementById('wait-card').style.display     = 'none';
-      document.getElementById('complete-card').style.display = 'block';
-    } else {
-      document.getElementById('complete-card').style.display = 'none';
-      var cur = picks[curIdx];
-      if (cur.manager === currentUser) {
-        document.getElementById('input-card').style.display  = 'block';
-        document.getElementById('wait-card').style.display   = 'none';
-        document.getElementById('input-title').textContent   = 'Pick ' + (curIdx + 1) + ' — Enter your player';
-        setTimeout(function() { document.getElementById('player-input').focus(); }, 60);
-      } else {
-        document.getElementById('input-card').style.display  = 'none';
-        document.getElementById('wait-card').style.display   = 'block';
-        document.getElementById('wait-name').textContent     = DISPLAY[cur.manager];
-      }
-    }
   }
 
   // ── Keyboard ────────────────────────────────────────────
@@ -571,6 +907,12 @@
     });
     document.getElementById('player-input').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') { e.preventDefault(); submitPick(); }
+    });
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.classList.remove('open');
+      });
     });
   });
 
@@ -582,7 +924,7 @@
     t.style.background = isError ? '#dc2626' : '#1f2937';
     t.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2800);
+    toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3000);
   }
 </script>
 </body>
