@@ -247,6 +247,20 @@
       <div class="section-divider"></div>
 
       <div class="admin-section">
+        <div class="admin-section-label">Active Turn</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">Force the draft to any pick slot. Use to skip, go back, or take over a slot.</div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <select id="force-turn-select" style="flex:1;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:10px;padding:10px 12px;font-family:DM Sans,sans-serif;font-size:0.85rem;font-weight:600;outline:none;min-width:120px;">
+            <option value="">Choose pick slot…</option>
+          </select>
+          <button class="admin-action-btn a-gold" onclick="forceTurn()">Set Active Turn</button>
+        </div>
+        <div id="force-turn-status" style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:6px;"></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="admin-section">
         <div class="admin-section-label">Picks</div>
         <div class="admin-row">
           <button class="admin-action-btn a-blue" onclick="openEditPicksModal()">✏️ Edit Any Pick</button>
@@ -295,9 +309,18 @@
     <div class="input-card" id="input-card" style="display:none">
       <div class="input-label">Your pick</div>
       <div class="input-title" id="input-title">Enter your player</div>
-      <div class="input-row">
-        <input type="text" class="player-input" id="player-input" placeholder="Player name…" autocomplete="off">
-        <button class="submit-btn" id="submit-btn" onclick="submitPick()">Lock In</button>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <input type="text" class="player-input" id="player-input" placeholder="Player name *" autocomplete="off">
+        <input type="text" class="player-input" id="player-team" placeholder="Team (e.g. Kansas)" autocomplete="off">
+        <div style="display:flex;gap:8px;">
+          <input type="number" class="player-input" id="player-seed" placeholder="Seed (1-16)" min="1" max="16" style="flex:1">
+          <select class="player-input" id="player-pos" style="flex:1">
+            <option value="">Position…</option>
+            <option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option><option>G</option><option>F</option>
+          </select>
+        </div>
+        <input type="text" class="player-input" id="player-notes" placeholder="Notes (optional)" autocomplete="off">
+        <button class="submit-btn" id="submit-btn" onclick="submitPick()" style="width:100%;margin-top:2px;">Lock In</button>
       </div>
     </div>
 
@@ -519,6 +542,7 @@
     adminOpen = !adminOpen;
     document.getElementById('admin-panel').style.display = adminOpen ? 'block' : 'none';
     document.getElementById('toggle-admin-btn').textContent = adminOpen ? '✕ Close Admin' : '⚙️ Admin';
+    if (adminOpen) populateForceTurnSelect();
   }
 
   // ── Polling ─────────────────────────────────────────────
@@ -620,36 +644,47 @@
     if (!state.randomized || !state.order.length) { showToast('Set draft order first', true); return; }
     var picks = buildSnake(state.order);
     var wrap  = document.getElementById('edit-picks-table-wrap');
-
-    var html = '<table class="picks-table"><thead><tr><th>#</th><th>Manager</th><th>Player</th><th></th></tr></thead><tbody>';
+    var html  = '';
     picks.forEach(function(pick, i) {
-      var pickNum    = i + 1;
-      var playerName = state.picks[pickNum] ? state.picks[pickNum].player : '';
-      html += '<tr>'
-        + '<td>' + pickNum + '</td>'
-        + '<td>' + DISPLAY[pick.manager] + '</td>'
-        + '<td><input id="ep-' + pickNum + '" value="' + escAttr(playerName) + '" placeholder="—"></td>'
-        + '<td style="white-space:nowrap">'
-        + '<button class="tbl-save-btn" onclick="savePickEdit(' + pickNum + ')">Save</button>'
-        + (playerName ? '<button class="tbl-del-btn" onclick="deletePickEdit(' + pickNum + ')">Del</button>' : '')
-        + '</td>'
-        + '</tr>';
+      var pickNum  = i + 1;
+      var pd       = state.picks[pickNum] || {};
+      var hasPick  = !!pd.player;
+      html += '<div style="border:1px solid var(--gray-300);border-radius:10px;padding:12px;margin-bottom:10px;">'
+        + '<div style="font-size:0.72rem;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;">Pick ' + pickNum + ' · ' + DISPLAY[pick.manager] + '</div>'
+        + '<input class="modal-input" style="margin-bottom:6px;" id="ep-name-' + pickNum + '" placeholder="Player name *" value="' + escAttr(pd.player||'') + '">'
+        + '<input class="modal-input" style="margin-bottom:6px;" id="ep-team-' + pickNum + '" placeholder="Team" value="' + escAttr(pd.team||'') + '">'
+        + '<div style="display:flex;gap:6px;margin-bottom:6px;">'
+        + '<input class="modal-input" style="margin-bottom:0;flex:1;" id="ep-seed-' + pickNum + '" type="number" min="1" max="16" placeholder="Seed" value="' + escAttr(String(pd.seed||'')) + '">'
+        + '<select class="modal-input" style="margin-bottom:0;flex:1;" id="ep-pos-' + pickNum + '">'
+        + '<option value="">Position…</option>'
+        + ['PG','SG','SF','PF','C','G','F'].map(function(p){ return '<option' + (pd.pos===p?' selected':'') + '>' + p + '</option>'; }).join('')
+        + '</select>'
+        + '</div>'
+        + '<input class="modal-input" style="margin-bottom:8px;" id="ep-notes-' + pickNum + '" placeholder="Notes (optional)" value="' + escAttr(pd.notes||'') + '">'
+        + '<div style="display:flex;gap:6px;">'
+        + '<button class="tbl-save-btn" style="flex:1;padding:8px;" onclick="savePickEdit(' + pickNum + ')">Save</button>'
+        + (hasPick ? '<button class="tbl-del-btn" style="padding:8px;" onclick="deletePickEdit(' + pickNum + ')">Delete</button>' : '')
+        + '</div>'
+        + '</div>';
     });
-    html += '</tbody></table>';
     wrap.innerHTML = html;
     openModal('edit-picks-modal');
   }
 
   async function savePickEdit(pickNum) {
-    var val = document.getElementById('ep-' + pickNum).value.trim();
-    if (!val) { showToast('Enter a player name', true); return; }
+    var name  = document.getElementById('ep-name-'  + pickNum).value.trim();
+    var team  = document.getElementById('ep-team-'  + pickNum).value.trim();
+    var seed  = document.getElementById('ep-seed-'  + pickNum).value.trim();
+    var pos   = document.getElementById('ep-pos-'   + pickNum).value.trim();
+    var notes = document.getElementById('ep-notes-' + pickNum).value.trim();
+    if (!name) { showToast('Enter a player name', true); return; }
     var picks   = buildSnake(state.order);
     var manager = picks[pickNum - 1].manager;
     var newPicks = Object.assign({}, state.picks);
-    newPicks[pickNum] = { manager: manager, player: val };
+    newPicks[pickNum] = { manager: manager, player: name, team: team, seed: seed ? parseInt(seed) : '', pos: pos, notes: notes };
     var ns = Object.assign({}, state, { picks: newPicks });
     await save(ns, 'Pick ' + pickNum + ' updated!');
-    openEditPicksModal(); // refresh table
+    openEditPicksModal();
   }
 
   async function deletePickEdit(pickNum) {
@@ -676,8 +711,52 @@
 
   async function clearAllPicks() {
     if (!confirm('Clear ALL picks? This cannot be undone.')) return;
-    var ns = Object.assign({}, state, { picks: {} });
+    var ns = Object.assign({}, state, { picks: {}, forcedTurn: null });
     await save(ns, 'All picks cleared');
+  }
+
+  // ── Force active turn ───────────────────────────────────
+  function populateForceTurnSelect() {
+    var sel = document.getElementById('force-turn-select');
+    if (!sel || !state.randomized || !state.order.length) return;
+    var picks   = buildSnake(state.order);
+    var curIdx  = getCurrentIdx(picks);
+    sel.innerHTML = '<option value="">Choose pick slot…</option>';
+    picks.forEach(function(pick, i) {
+      var pickNum = i + 1;
+      var pd      = state.picks[pickNum];
+      var label   = 'Pick ' + pickNum + ' — ' + DISPLAY[pick.manager] + (pd ? ' (' + pd.player + ')' : '');
+      var opt     = document.createElement('option');
+      opt.value       = pickNum;
+      opt.textContent = label;
+      if (i === curIdx) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    var status = document.getElementById('force-turn-status');
+    if (status) {
+      var forced = state.forcedTurn;
+      status.textContent = forced
+        ? 'Currently forced to pick ' + forced + ' (' + DISPLAY[buildSnake(state.order)[forced-1].manager] + ')'
+        : 'Currently auto-advancing in snake order';
+    }
+  }
+
+  async function forceTurn() {
+    var sel = document.getElementById('force-turn-select');
+    var val = parseInt(sel.value);
+    if (!val) { showToast('Choose a pick slot first', true); return; }
+    var picks   = buildSnake(state.order);
+    var pick    = picks[val - 1];
+    if (!confirm('Force the active turn to pick ' + val + ' (' + DISPLAY[pick.manager] + ')? This will skip or rewind the queue to that slot.')) return;
+    // Clear all picks from val onward so that slot becomes "current"
+    var newPicks = Object.assign({}, state.picks);
+    // Remove picks from val to end so getCurrentIdx lands on val-1 (0-based)
+    for (var i = val; i <= picks.length; i++) {
+      delete newPicks[i];
+    }
+    var ns = Object.assign({}, state, { picks: newPicks, forcedTurn: val });
+    await save(ns, 'Turn set to pick ' + val + ' — ' + DISPLAY[pick.manager]);
+    populateForceTurnSelect();
   }
 
   function openTimeModal() {
@@ -734,21 +813,29 @@
 
   // ── Regular draft actions ───────────────────────────────
   async function submitPick() {
-    var val = document.getElementById('player-input').value.trim();
+    var val   = document.getElementById('player-input').value.trim();
+    var team  = document.getElementById('player-team').value.trim();
+    var seed  = document.getElementById('player-seed').value.trim();
+    var pos   = document.getElementById('player-pos').value.trim();
+    var notes = document.getElementById('player-notes').value.trim();
     if (!val) { showToast('Enter a player name first', true); return; }
     var picks = buildSnake(state.order);
     var idx   = getCurrentIdx(picks);
     if (idx >= picks.length) return;
-    if (picks[idx].manager !== currentUser) { showToast("That's not your pick!", true); return; }
+    if (picks[idx].manager !== currentUser) { showToast("That\'s not your pick!", true); return; }
     var btn = document.getElementById('submit-btn');
     btn.disabled = true; btn.textContent = 'Saving…';
     var newPicks = Object.assign({}, state.picks);
-    newPicks[idx + 1] = { manager: currentUser, player: val };
+    newPicks[idx + 1] = { manager: currentUser, player: val, team: team, seed: seed ? parseInt(seed) : '', pos: pos, notes: notes };
     var ns = Object.assign({}, state, { picks: newPicks });
     try {
       await pushState(ns);
       state = ns;
       document.getElementById('player-input').value = '';
+      document.getElementById('player-team').value  = '';
+      document.getElementById('player-seed').value  = '';
+      document.getElementById('player-pos').value   = '';
+      document.getElementById('player-notes').value = '';
       showToast('Pick ' + (idx + 1) + ' locked in — ' + val);
       render();
     } catch(e) { showToast('Failed to save — try again', true); }
@@ -798,21 +885,45 @@
       var isCurrent  = (i === curIdx && !isDone);
       var isMe       = (pick.manager === currentUser);
       var done       = !!state.picks[i + 1];
-      var playerName = state.picks[i + 1] ? state.picks[i + 1].player : '';
+      var pickData   = state.picks[i + 1] || {};
+      var playerName = pickData.player || '';
+      var playerTeam = pickData.team   || '';
+      var playerSeed = pickData.seed   || '';
+      var playerPos  = pickData.pos    || '';
+      var playerNotes= pickData.notes  || '';
       var badge = '';
       if (done)                   badge = '<span class="pick-badge badge-done">Done</span>';
       else if (isCurrent && isMe) badge = '<span class="pick-badge badge-you">Your Pick</span>';
       else if (isCurrent)         badge = '<span class="pick-badge badge-up">Up Now</span>';
 
+      var seedBadge = (playerSeed && parseInt(playerSeed) >= 9)
+        ? '<span style="background:var(--crimson);color:white;font-size:0.6rem;font-weight:700;padding:2px 5px;border-radius:4px;margin-left:4px;">#' + playerSeed + ' 2x</span>'
+        : (playerSeed ? '<span style="background:var(--gray-300);color:var(--gray-700);font-size:0.6rem;font-weight:700;padding:2px 5px;border-radius:4px;margin-left:4px;">#' + playerSeed + '</span>' : '');
+
+      var detailLine = '';
+      if (playerName) {
+        var parts = [];
+        if (playerTeam) parts.push(playerTeam);
+        if (playerPos)  parts.push(playerPos);
+        detailLine = '<div style="font-size:0.72rem;color:var(--gray-500);margin-top:2px;grid-column:2/-1;">' + parts.join(' · ') + (playerNotes ? ' — <em>' + playerNotes + '</em>' : '') + '</div>';
+      }
+
       html += '<div class="pick-row'
         + (isCurrent ? ' is-current' : '')
         + (isMe && !done ? ' is-mine' : '')
-        + (done ? ' completed' : '') + '">'
-        + '<div class="pick-num">' + (i + 1) + '</div>'
-        + '<div class="pick-name">' + DISPLAY[pick.manager] + '</div>'
-        + (playerName ? '<div class="player-entered">' + playerName + '</div>' : '<div class="player-entered"></div>')
+        + (done ? ' completed' : '') + '" style="flex-wrap:wrap;align-items:flex-start;">'
+        + '<div class="pick-num" style="padding-top:2px;">' + (i + 1) + '</div>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">'
+        + '<span class="pick-name" style="margin:0;">' + DISPLAY[pick.manager] + '</span>'
+        + (playerName ? '<span class="player-entered" style="font-style:normal;font-weight:600;color:var(--gray-700);">' + playerName + '</span>' + seedBadge : '')
+        + '</div>'
+        + (detailLine)
+        + '</div>'
+        + '<div style="display:flex;align-items:center;gap:4px;padding-top:2px;">'
         + badge
         + (currentUser === 'charles' ? '<button class="edit-pick-btn" onclick="quickEdit(' + (i+1) + ')">Edit</button>' : '')
+        + '</div>'
         + '</div>';
     });
 
@@ -838,23 +949,14 @@
     }
   }
 
-  // Quick inline edit from pick list
-  async function quickEdit(pickNum) {
-    var current = state.picks[pickNum] ? state.picks[pickNum].player : '';
-    var val = prompt('Edit pick ' + pickNum + ':', current);
-    if (val === null) return;
-    if (val.trim() === '') {
-      if (!confirm('Delete pick ' + pickNum + '?')) return;
-      var newPicks = Object.assign({}, state.picks);
-      delete newPicks[pickNum];
-      await save(Object.assign({}, state, { picks: newPicks }), 'Pick ' + pickNum + ' deleted');
-    } else {
-      var picks   = buildSnake(state.order);
-      var manager = picks[pickNum - 1].manager;
-      var newPicks = Object.assign({}, state.picks);
-      newPicks[pickNum] = { manager: manager, player: val.trim() };
-      await save(Object.assign({}, state, { picks: newPicks }), 'Pick ' + pickNum + ' updated!');
-    }
+  // Quick inline edit — opens the full edit modal scrolled to that pick
+  function quickEdit(pickNum) {
+    openEditPicksModal();
+    // Scroll to the pick after modal renders
+    setTimeout(function() {
+      var el = document.getElementById('ep-name-' + pickNum);
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.focus(); }
+    }, 120);
   }
 
   // ── Modal helpers ───────────────────────────────────────
