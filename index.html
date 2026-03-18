@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dig Bicken Draft Order</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap');
+
+    :root {
+      --crimson: #E8000D;
+      --blue: #0051A5;
+      --blue-dark: #003d7a;
+      --gold: #F5C518;
+      --white: #ffffff;
+      --gray-100: #f4f5f7;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blue-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 0 60px;
+    }
+
+    .header {
+      width: 100%;
+      background: var(--crimson);
+      padding: 18px 20px 14px;
+      text-align: center;
+      position: relative;
+    }
+    .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--white); letter-spacing: 1px; line-height: 1; }
+    .header-sub { font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 500; }
+    .rock-chalk { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.65rem; font-weight: 700; padding: 5px 9px; border-radius: 8px; letter-spacing: 0.5px; }
+
+    .content { width: 100%; max-width: 480px; padding: 20px 16px 0; }
+
+    /* WHO CARD */
+    .who-card { background: var(--white); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .who-label { font-size: 0.7rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .who-title { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-bottom: 14px; }
+    .manager-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .manager-btn { padding: 14px 10px; border-radius: 10px; border: 2px solid var(--gray-300); background: var(--gray-100); font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; color: var(--gray-700); cursor: pointer; transition: all 0.15s; text-align: center; -webkit-appearance: none; appearance: none; }
+    .manager-btn:hover { border-color: var(--blue); background: #e8f0fb; color: var(--blue); }
+    .manager-btn:active { transform: scale(0.97); }
+    .manager-btn.full-row { grid-column: span 2; }
+
+    /* PASSWORD MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 320px; }
+    .modal-title { font-size: 1rem; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+    .modal-sub { font-size: 0.8rem; color: var(--gray-500); margin-bottom: 16px; }
+    .modal-input { width: 100%; border: 2px solid var(--gray-300); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; color: var(--gray-700); outline: none; transition: border-color 0.15s; margin-bottom: 8px; }
+    .modal-input:focus { border-color: var(--blue); }
+    .modal-error { font-size: 0.78rem; font-weight: 700; color: var(--crimson); margin-bottom: 12px; display: none; }
+    .modal-footer { display: flex; gap: 8px; justify-content: flex-end; }
+    .btn-cancel { background: var(--gray-100); border: 2px solid var(--gray-300); color: var(--gray-700); border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+    .btn-unlock { background: var(--blue); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+    .btn-unlock:hover { opacity: 0.88; }
+
+    /* COUNTDOWN */
+    .countdown-card { background: var(--white); border-radius: 16px; padding: 24px 20px; margin-bottom: 16px; text-align: center; }
+    .countdown-label { font-size: 0.7rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .countdown-time { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--crimson); letter-spacing: 3px; line-height: 1; }
+    .countdown-sub { font-size: 0.8rem; color: var(--gray-500); margin-top: 8px; }
+    .countdown-units { display: flex; justify-content: center; gap: 24px; margin-top: 6px; }
+    .countdown-unit { font-size: 0.6rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* JOKE CARD */
+    .joke-card { background: var(--blue); border-radius: 16px; padding: 22px 20px; margin-bottom: 16px; position: relative; overflow: hidden; }
+    .joke-card::before { content: '🤖'; position: absolute; top: -10px; right: -4px; font-size: 5rem; opacity: 0.08; }
+    .joke-label { font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .joke-text { font-size: 0.95rem; font-weight: 500; color: var(--white); line-height: 1.6; min-height: 70px; }
+    .joke-next { margin-top: 14px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; border-radius: 8px; padding: 8px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 700; cursor: pointer; -webkit-appearance: none; appearance: none; }
+    .joke-next:hover { background: rgba(255,255,255,0.25); }
+
+    /* DRAFT UI */
+    .order-card { background: var(--white); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .order-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .order-title { font-size: 1rem; font-weight: 700; color: var(--blue); }
+    .order-sub { font-size: 0.72rem; color: var(--gray-500); margin-top: 2px; }
+    .randomize-btn { background: var(--crimson); color: white; border: none; border-radius: 10px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+    .randomize-btn:hover { opacity: 0.88; }
+    .randomize-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .pick-list { display: flex; flex-direction: column; gap: 6px; }
+    .pick-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--gray-100); border: 2px solid transparent; transition: all 0.2s; }
+    .pick-row.is-mine { border-color: var(--blue); background: #e8f0fb; }
+    .pick-row.is-current { border-color: var(--gold); background: #fffbea; box-shadow: 0 2px 8px rgba(245,197,24,0.25); }
+    .pick-row.completed { opacity: 0.55; }
+    .pick-row.completed .pick-name { text-decoration: line-through; }
+    .pick-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--gray-500); min-width: 28px; text-align: center; }
+    .pick-row.is-current .pick-num { color: var(--gold); }
+    .pick-row.is-mine .pick-num { color: var(--blue); }
+    .pick-name { font-size: 0.95rem; font-weight: 700; color: var(--gray-700); flex: 1; }
+    .pick-badge { font-size: 0.65rem; font-weight: 700; padding: 3px 7px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .badge-you { background: var(--blue); color: white; }
+    .badge-up { background: var(--gold); color: #7a5800; }
+    .badge-done { background: var(--gray-300); color: var(--gray-500); }
+    .player-entered { font-size: 0.75rem; color: var(--gray-500); font-weight: 500; font-style: italic; flex: 1; }
+
+    .input-card { background: var(--white); border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 2px solid var(--gold); }
+    .input-label { font-size: 0.7rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .input-title { font-size: 1rem; font-weight: 700; color: var(--blue-dark); margin-bottom: 14px; }
+    .input-row { display: flex; gap: 8px; }
+    .player-input { flex: 1; border: 2px solid var(--gray-300); border-radius: 10px; padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--gray-700); outline: none; transition: border-color 0.15s; }
+    .player-input:focus { border-color: var(--blue); }
+    .submit-btn { background: var(--blue); color: white; border: none; border-radius: 10px; padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+    .submit-btn:hover { opacity: 0.88; }
+    .submit-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .wait-card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; text-align: center; color: rgba(255,255,255,0.6); font-size: 0.9rem; font-weight: 500; }
+    .wait-name { color: var(--gold); font-weight: 700; }
+
+    .complete-card { background: var(--white); border-radius: 16px; padding: 24px 20px; text-align: center; margin-bottom: 16px; }
+    .complete-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .complete-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--blue); letter-spacing: 1px; }
+    .complete-sub { font-size: 0.85rem; color: var(--gray-500); margin-top: 6px; }
+    .reset-btn { margin-top: 16px; background: var(--crimson); color: white; border: none; border-radius: 10px; padding: 12px 24px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+
+    .loading-card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 24px 20px; text-align: center; color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+
+    .round-divider { display: flex; align-items: center; gap: 8px; margin: 6px 0 4px; }
+    .round-divider-line { flex: 1; height: 1px; background: var(--gray-300); }
+    .round-divider-label { font-size: 0.65rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .sync-bar { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-align: center; margin-top: 8px; }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--gray-700); color: white; padding: 10px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 600; transition: transform 0.25s; z-index: 999; white-space: nowrap; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">Dig Bicken Draft Order</div>
+  <div class="header-sub">NCAA Tournament · Snake Draft · 5 Rounds</div>
+  <div class="rock-chalk">ROCK CHALK!</div>
+</div>
+
+<div class="content">
+
+  <!-- WHO ARE YOU -->
+  <div id="who-card" class="who-card">
+    <div class="who-label">Every time you visit</div>
+    <div class="who-title">Who are you?</div>
+    <div class="manager-grid">
+      <button class="manager-btn full-row" onclick="selectMe('charles')">Charles</button>
+      <button class="manager-btn" onclick="selectMe('kyle')">Kyle</button>
+      <button class="manager-btn" onclick="selectMe('brian')">Brian</button>
+      <button class="manager-btn" onclick="selectMe('matt')">Matt</button>
+      <button class="manager-btn" onclick="selectMe('andy')">Andy</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading-card" class="loading-card" style="display:none">Loading draft data…</div>
+
+  <!-- COUNTDOWN + JOKES (shown before 8:30 PM CT) -->
+  <div id="pre-draft" style="display:none">
+    <div class="countdown-card">
+      <div class="countdown-label">Draft starts Wednesday March 18 at 8:30 PM CT</div>
+      <div class="countdown-time" id="countdown-display">--:--:--</div>
+      <div class="countdown-units">
+        <div class="countdown-unit">Hours</div>
+        <div class="countdown-unit">Minutes</div>
+        <div class="countdown-unit">Seconds</div>
+      </div>
+      <div class="countdown-sub" id="countdown-sub">Sit tight. Kyle is still figuring out what a bracket is.</div>
+    </div>
+    <div class="joke-card">
+      <div class="joke-label">While you wait · A message about Kyle 🤖</div>
+      <div class="joke-text" id="joke-text"></div>
+      <button class="joke-next" onclick="nextJoke()">Next joke →</button>
+    </div>
+  </div>
+
+  <!-- MAIN DRAFT UI -->
+  <div id="main-content" style="display:none">
+    <div class="order-card">
+      <div class="order-header">
+        <div>
+          <div class="order-title">Draft Order</div>
+          <div class="order-sub" id="order-sub-text">Not set yet</div>
+        </div>
+        <button class="randomize-btn" id="randomize-btn" onclick="randomizeDraft()" style="display:none">🎲 Randomize</button>
+      </div>
+      <div id="pick-list" class="pick-list">
+        <div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Waiting for Charles to set the draft order.</div>
+      </div>
+    </div>
+
+    <div class="input-card" id="input-card" style="display:none">
+      <div class="input-label">Your pick</div>
+      <div class="input-title" id="input-title">Enter your player</div>
+      <div class="input-row">
+        <input type="text" class="player-input" id="player-input" placeholder="Player name…" autocomplete="off">
+        <button class="submit-btn" id="submit-btn" onclick="submitPick()">Lock In</button>
+      </div>
+    </div>
+
+    <div class="wait-card" id="wait-card" style="display:none">
+      Waiting on <span class="wait-name" id="wait-name"></span> to make their pick…
+    </div>
+
+    <div class="complete-card" id="complete-card" style="display:none">
+      <div class="complete-icon">🏆</div>
+      <div class="complete-title">Draft Complete</div>
+      <div class="complete-sub">All 25 picks locked in. Rock Chalk!</div>
+      <button class="reset-btn" onclick="resetDraft()">Start New Draft</button>
+    </div>
+
+    <div class="sync-bar" id="sync-bar"></div>
+  </div>
+
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="modal-overlay" id="password-modal">
+  <div class="modal">
+    <div class="modal-title">Charles only</div>
+    <div class="modal-sub">Enter the password to continue as Charles.</div>
+    <input class="modal-input" id="modal-pw-input" type="password" placeholder="Password" autocomplete="off">
+    <div class="modal-error" id="modal-pw-error">Wrong password. Try again.</div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="cancelPassword()">Cancel</button>
+      <button class="btn-unlock" onclick="submitPassword()">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── JSONbin ─────────────────────────────────────────────
+  const BIN_ID  = '69bb168baa77b81da9f8b191';
+  const API_KEY = '$2a$10$Qjr41H9zdqcfVa2gj3iPWu/5.U4lhj7v6nqdIJXZC4/mZfBHIRkUW';
+  const BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+  const H_READ  = { 'X-Master-Key': API_KEY };
+  const H_WRITE = { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY };
+
+  // ── Config ──────────────────────────────────────────────
+  const MANAGERS     = ['charles', 'kyle', 'brian', 'matt', 'andy'];
+  const DISPLAY      = { charles: 'Charles', kyle: 'Kyle', brian: 'Brian', matt: 'Matt', andy: 'Andy' };
+  const ROUNDS       = 5;
+  const CHARLES_PASS = '1234';
+
+  // Draft target: Wednesday March 18 2026 8:30 PM CST = 02:30 UTC March 19
+  // CST = UTC-6
+  const DRAFT_START = new Date('2026-03-19T02:30:00Z');
+
+  let currentUser    = null;
+  let state          = { order: [], picks: {}, randomized: false };
+  let pollTimer      = null;
+  let countdownTimer = null;
+
+  // ── Countdown helpers ───────────────────────────────────
+  function isDraftOpen() {
+    return new Date() >= DRAFT_START;
+  }
+
+  function updateCountdown() {
+    const now  = new Date();
+    const diff = DRAFT_START - now;
+
+    if (diff <= 0) {
+      document.getElementById('countdown-display').textContent = 'LIVE!';
+      document.getElementById('countdown-sub').textContent     = "Let's go. Rock Chalk!";
+      return;
+    }
+
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    document.getElementById('countdown-display').textContent =
+      pad(h) + ':' + pad(m) + ':' + pad(s);
+  }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  // ── Password modal ──────────────────────────────────────
+  function selectMe(name) {
+    if (name === 'charles') {
+      document.getElementById('modal-pw-input').value        = '';
+      document.getElementById('modal-pw-error').style.display = 'none';
+      document.getElementById('password-modal').classList.add('open');
+      setTimeout(() => document.getElementById('modal-pw-input').focus(), 60);
+    } else {
+      proceedAs(name);
+    }
+  }
+
+  function submitPassword() {
+    const val = document.getElementById('modal-pw-input').value;
+    if (val === CHARLES_PASS) {
+      document.getElementById('password-modal').classList.remove('open');
+      proceedAs('charles');
+    } else {
+      document.getElementById('modal-pw-error').style.display = 'block';
+      document.getElementById('modal-pw-input').value         = '';
+      document.getElementById('modal-pw-input').focus();
+    }
+  }
+
+  function cancelPassword() {
+    document.getElementById('password-modal').classList.remove('open');
+  }
+
+  // ── Load and route ──────────────────────────────────────
+  function proceedAs(name) {
+    currentUser = name;
+    document.getElementById('who-card').style.display     = 'none';
+    document.getElementById('loading-card').style.display = 'block';
+
+    fetchState().then(function(s) {
+      state = s;
+      document.getElementById('loading-card').style.display = 'none';
+
+      if (isDraftOpen()) {
+        showDraft();
+      } else {
+        showPreDraft();
+      }
+    }).catch(function() {
+      showToast('Could not connect — check your connection', true);
+      document.getElementById('loading-card').style.display = 'none';
+      document.getElementById('who-card').style.display     = 'block';
+      currentUser = null;
+    });
+  }
+
+  // ── Pre-draft screen ────────────────────────────────────
+  function showPreDraft() {
+    document.getElementById('pre-draft').style.display    = 'block';
+    document.getElementById('main-content').style.display = 'none';
+
+    // Show first joke
+    jokeIdx = Math.floor(Math.random() * JOKES.length);
+    document.getElementById('joke-text').textContent = JOKES[jokeIdx];
+
+    // Start countdown ticker
+    updateCountdown();
+    clearInterval(countdownTimer);
+    countdownTimer = setInterval(function() {
+      updateCountdown();
+      if (isDraftOpen()) {
+        clearInterval(countdownTimer);
+        fetchState().then(function(s) { state = s; showDraft(); });
+      }
+    }, 1000);
+  }
+
+  // ── Draft screen ────────────────────────────────────────
+  function showDraft() {
+    clearInterval(countdownTimer);
+    document.getElementById('pre-draft').style.display    = 'none';
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('randomize-btn').style.display = currentUser === 'charles' ? 'block' : 'none';
+    render();
+    startPolling();
+  }
+
+  // ── Jokes ───────────────────────────────────────────────
+  const JOKES = [
+    "Kyle thinks AI is dangerous. He also thought Bluetooth was a government conspiracy until 2019.",
+    "Kyle said 'AI will never replace humans.' His Roomba has been doing his vacuuming for 4 years.",
+    "Kyle refuses to use ChatGPT. He does, however, ask Siri for directions — which is just AI with better PR.",
+    "Why did Kyle cross the road? To get away from the AI. The AI crossed faster, more efficiently, and with better picks.",
+    "Kyle's biggest fear is robots taking over. His second biggest fear is what his browser history says about him.",
+    "AI is taking over the world, Kyle. It already took your fantasy football advice and your teams got better.",
+    "Kyle hates AI but lets Spotify tell him what to listen to. That's just AI in a hoodie, buddy.",
+    "The robot uprising Kyle fears will be led by the self-checkout he argued with at Walmart last Thursday.",
+    "Kyle said he could beat AI at anything. We gave him a math problem. The AI finished before Kyle found a pencil.",
+    "When the robots take over, they'll spare anyone who was nice to them. Kyle is not on that list.",
+    "Kyle's draft strategy: gut feeling and vibes. The AI's: 40 years of sports data. Should be a close race.",
+    "Why doesn't Kyle trust AI? Same reason he doesn't trust anyone who knows more than him. So, everyone.",
+    "I asked an AI to predict Kyle's picks tonight. It returned an error. Even it has standards.",
+    "Kyle says AI is a fad. He also said that about email, smartphones, and washing his truck regularly.",
+    "Breaking: Kyle has been outsmarted by a vending machine for the third straight week. AI takeover imminent.",
+    "Kyle once unplugged his router because 'the internet was being weird.' He is now our AI ethics expert.",
+    "Why did Kyle lose at fantasy last year? No data. Why will he lose this year? Still no data.",
+    "I asked AI to write a joke about Kyle. It said 'this practically writes itself' and took the afternoon off.",
+    "Kyle and AI walk into a bar. AI orders the optimal drink. Kyle orders a Bud Light and complains about technology.",
+    "Kyle is scared of AI for the same reason he won't go to therapy. He knows it'll be right about everything.",
+    "The first thing AI does when it takes over is audit everyone's draft history. Kyle has requested asylum.",
+    "Kyle refuses to use AI tools at work. His coworkers finished at 3pm. Kyle is still there.",
+    "Kyle's spirit animal is a fax machine. Technically functional. Completely resistant to any form of progress.",
+    "Scientists say AI will exceed human intelligence by 2030. For Kyle, that deadline passed in 2011.",
+    "Why did Kyle's girlfriend break up with him? She asked Alexa for advice and Alexa said she could do better.",
+  ];
+
+  let jokeIdx = 0;
+  function nextJoke() {
+    jokeIdx = (jokeIdx + 1) % JOKES.length;
+    document.getElementById('joke-text').textContent = JOKES[jokeIdx];
+  }
+
+  // ── JSONbin ─────────────────────────────────────────────
+  async function fetchState() {
+    const res = await fetch(BIN_URL + '/latest', { headers: H_READ });
+    if (!res.ok) throw new Error('Load failed');
+    return (await res.json()).record;
+  }
+
+  async function pushState(s) {
+    const res = await fetch(BIN_URL, { method: 'PUT', headers: H_WRITE, body: JSON.stringify(s) });
+    if (!res.ok) throw new Error('Save failed');
+  }
+
+  // ── Polling ─────────────────────────────────────────────
+  function startPolling() {
+    clearInterval(pollTimer);
+    pollTimer = setInterval(async function() {
+      try {
+        state = await fetchState();
+        render();
+        document.getElementById('sync-bar').textContent =
+          'Live · ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      } catch(e) {}
+    }, 5000);
+  }
+
+  // ── Snake draft ─────────────────────────────────────────
+  function buildSnake(order) {
+    var picks = [];
+    for (var r = 0; r < ROUNDS; r++) {
+      var arr = r % 2 === 0 ? order.slice() : order.slice().reverse();
+      arr.forEach(function(m) { picks.push({ manager: m }); });
+    }
+    return picks;
+  }
+
+  function getCurrentIdx(picks) {
+    for (var i = 0; i < picks.length; i++) {
+      if (!state.picks[i + 1]) return i;
+    }
+    return picks.length;
+  }
+
+  async function randomizeDraft() {
+    if (currentUser !== 'charles') return;
+    var btn = document.getElementById('randomize-btn');
+    btn.disabled = true; btn.textContent = 'Setting…';
+    var arr = MANAGERS.slice();
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    var newState = { order: arr, picks: {}, randomized: true };
+    try {
+      await pushState(newState);
+      state = newState;
+      showToast('Draft order set! 🎲');
+      render();
+    } catch(e) { showToast('Failed to save — try again', true); }
+    finally { btn.disabled = false; btn.textContent = '🎲 Re-Randomize'; }
+  }
+
+  async function submitPick() {
+    var val = document.getElementById('player-input').value.trim();
+    if (!val) { showToast('Enter a player name first', true); return; }
+    var picks = buildSnake(state.order);
+    var idx   = getCurrentIdx(picks);
+    if (idx >= picks.length) return;
+    if (picks[idx].manager !== currentUser) { showToast("That's not your pick!", true); return; }
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    var newPicks = Object.assign({}, state.picks);
+    newPicks[idx + 1] = { manager: currentUser, player: val };
+    var newState = { order: state.order, picks: newPicks, randomized: state.randomized };
+    try {
+      await pushState(newState);
+      state = newState;
+      document.getElementById('player-input').value = '';
+      showToast('Pick ' + (idx + 1) + ' locked in — ' + val);
+      render();
+    } catch(e) { showToast('Failed to save — try again', true); }
+    finally { btn.disabled = false; btn.textContent = 'Lock In'; }
+  }
+
+  async function resetDraft() {
+    if (!confirm('Reset the entire draft? All picks will be cleared.')) return;
+    var newState = { order: [], picks: {}, randomized: false };
+    try { await pushState(newState); state = newState; render(); showToast('Draft reset'); }
+    catch(e) { showToast('Failed to reset', true); }
+  }
+
+  // ── Render ───────────────────────────────────────────────
+  function render() {
+    if (!state.randomized || !state.order || state.order.length === 0) {
+      document.getElementById('order-sub-text').textContent = 'Not set yet';
+      document.getElementById('pick-list').innerHTML = currentUser === 'charles'
+        ? '<div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Hit Randomize to set the draft order.</div>'
+        : '<div style="text-align:center;color:var(--gray-500);font-size:.85rem;padding:12px 0;">Waiting for Charles to set the draft order.</div>';
+      document.getElementById('input-card').style.display    = 'none';
+      document.getElementById('wait-card').style.display     = 'none';
+      document.getElementById('complete-card').style.display = 'none';
+      return;
+    }
+
+    var picks  = buildSnake(state.order);
+    var curIdx = getCurrentIdx(picks);
+    var isDone = curIdx >= picks.length;
+
+    document.getElementById('order-sub-text').textContent =
+      'Round 1: ' + state.order.map(function(m) { return DISPLAY[m]; }).join(' → ');
+
+    var html = '', lastRound = 0;
+    picks.forEach(function(pick, i) {
+      var round = Math.floor(i / 5) + 1;
+      var rev   = round % 2 === 0;
+      if (round !== lastRound) {
+        html += '<div class="round-divider"><div class="round-divider-line"></div><div class="round-divider-label">Round ' + round + (rev ? ' ↩' : '') + '</div><div class="round-divider-line"></div></div>';
+        lastRound = round;
+      }
+      var isCurrent  = (i === curIdx && !isDone);
+      var isMe       = (pick.manager === currentUser);
+      var done       = !!state.picks[i + 1];
+      var playerName = state.picks[i + 1] ? state.picks[i + 1].player : '';
+      var badge = '';
+      if (done)                   badge = '<span class="pick-badge badge-done">Done</span>';
+      else if (isCurrent && isMe) badge = '<span class="pick-badge badge-you">Your Pick</span>';
+      else if (isCurrent)         badge = '<span class="pick-badge badge-up">Up Now</span>';
+      html += '<div class="pick-row'
+        + (isCurrent ? ' is-current' : '')
+        + (isMe && !done ? ' is-mine' : '')
+        + (done ? ' completed' : '') + '">'
+        + '<div class="pick-num">' + (i + 1) + '</div>'
+        + '<div class="pick-name">' + DISPLAY[pick.manager] + '</div>'
+        + (playerName ? '<div class="player-entered">' + playerName + '</div>' : '')
+        + badge + '</div>';
+    });
+
+    document.getElementById('pick-list').innerHTML = html;
+
+    if (isDone) {
+      document.getElementById('input-card').style.display    = 'none';
+      document.getElementById('wait-card').style.display     = 'none';
+      document.getElementById('complete-card').style.display = 'block';
+    } else {
+      document.getElementById('complete-card').style.display = 'none';
+      var cur = picks[curIdx];
+      if (cur.manager === currentUser) {
+        document.getElementById('input-card').style.display  = 'block';
+        document.getElementById('wait-card').style.display   = 'none';
+        document.getElementById('input-title').textContent   = 'Pick ' + (curIdx + 1) + ' — Enter your player';
+        setTimeout(function() { document.getElementById('player-input').focus(); }, 60);
+      } else {
+        document.getElementById('input-card').style.display  = 'none';
+        document.getElementById('wait-card').style.display   = 'block';
+        document.getElementById('wait-name').textContent     = DISPLAY[cur.manager];
+      }
+    }
+  }
+
+  // ── Keyboard ────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('modal-pw-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); submitPassword(); }
+    });
+    document.getElementById('player-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); submitPick(); }
+    });
+  });
+
+  // ── Toast ────────────────────────────────────────────────
+  var toastTimer;
+  function showToast(msg, isError) {
+    var t = document.getElementById('toast');
+    t.textContent      = msg;
+    t.style.background = isError ? '#dc2626' : '#1f2937';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2800);
+  }
+</script>
+</body>
+</html>
